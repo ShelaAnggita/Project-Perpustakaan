@@ -1,0 +1,345 @@
+/* =================================================
+   HALAMAN LOGIN
+================================================= */
+
+.halaman-login {
+  background-color: #d9d9d9;
+  width: 100%;
+  min-width: 1440px;
+  height: 1024px;
+  position: relative;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+
+/* =================================================
+   LEFT PANEL
+================================================= */
+
+.left-panel {
+  position: absolute;
+  left: 0;
+  width: 956px;
+  height: 100%;
+}
+
+/* Judul */
+.text-wrapper {
+  position: absolute;
+  top: 59px;
+  left: 188px;
+  font-size: 30px;
+  font-weight: bold;
+}
+
+/* Selamat datang */
+.selamat-datang-di {
+  position: absolute;
+  top: 174px;
+  left: 128px;
+  width: 533px;
+  font-size: 34px;
+  line-height: 1.4;
+}
+
+/* Tagline */
+.text-wrapper-4 {
+  position: absolute;
+  top: 268px;
+  left: 128px;
+  font-size: 20px;
+}
+
+
+/* =================================================
+   RIGHT LOGIN PANEL
+================================================= */
+
+.rectangle {
+  position: absolute;
+  right: 0;
+  width: 484px;
+  height: 100%;
+  background-color: #ffffff;
+}
+
+/* Container login */
+.login-form-container {
+  position: relative;
+  padding: 200px 50px;
+}
+
+
+/* =================================================
+   TITLE LOGIN
+================================================= */
+
+.login-title {
+  font-size: 34px;
+  font-weight: bold;
+}
+
+.login-subtitle {
+  font-size: 18px;
+  margin-bottom: 40px;
+  color: #444;
+}
+
+
+/* =================================================
+   FORM
+================================================= */
+
+.form-group {
+  margin-bottom: 30px;
+}
+
+/* Label */
+.form-label {
+  display: block;
+  font-size: 22px;
+  font-weight: bold;
+  margin-bottom: 8px;
+}
+
+/* Input */
+.input-box {
+  width: 100%;
+  height: 50px;
+  background-color: #d9d9d9;
+  border: none;
+  padding: 0 15px;
+  font-size: 18px;
+  outline: none;
+  border-radius: 4px;
+}
+
+.input-box:focus {
+  background-color: #ececec;
+}
+
+
+/* =================================================
+   BUTTON LOGIN
+================================================= */
+
+.submit-btn {
+  width: 228px;
+  height: 56px;
+  background-color: #8aaeed;
+  border: none;
+  font-size: 22px;
+  font-weight: bold;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: 0.2s;
+}
+
+.submit-btn:hover {
+  background-color: #739be2;
+}
+
+
+/* =================================================
+   REGISTER LINK
+================================================= */
+
+.register-text {
+  margin-top: 20px;
+  font-size: 18px;
+}
+
+.register-text a {
+  font-weight: bold;
+  text-decoration: none;
+  color: black;
+}
+
+.register-text a:hover {
+  text-decoration: underline;
+}
+
+/* Variabel Warna & Font */
+:root {
+    --bg-left: #E5E7EB;
+    --bg-input: #DCDCDC;
+    --btn-color: #8EACEF;
+    --text-main: #1F2937;
+    --text-muted: #6B7280;
+    --white: #ffffff;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.container {
+    display: flex;
+    min-height: 100vh;
+}
+
+/* Sisi Kiri */
+.hero-section {
+    flex: 1.5;
+    background-color: var(--bg-left);
+    padding: 50px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: relative;
+}
+
+.brand {
+    position: absolute;
+    top: 40px;
+    left: 40px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.logo-box {
+    background: var(--white);
+    padding: 8px;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.logo-box i {
+    color: #3B82F6;
+    font-size: 24px;
+}
+
+.brand-name {
+    font-weight: bold;
+    font-size: 1.2rem;
+    color: var(--text-main);
+}
+
+.hero-content h1 {
+    font-size: 2.5rem;
+    color: var(--text-main);
+    line-height: 1.2;
+    margin-bottom: 10px;
+}
+
+.hero-content p {
+    color: var(--text-muted);
+    font-size: 1.1rem;
+    margin-bottom: 30px;
+}
+
+.hero-img {
+    width: 80%;
+    max-width: 500px;
+    mix-blend-mode: multiply;
+    display: block;
+    margin: 0 auto;
+}
+
+/* Sisi Kanan */
+.form-section {
+    flex: 1;
+    background-color: var(--white);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px;
+}
+
+.form-wrapper {
+    width: 100%;
+    max-width: 380px;
+}
+
+h2 {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 5px;
+}
+
+.subtitle {
+    color: var(--text-muted);
+    margin-bottom: 30px;
+}
+
+/* Input Styles */
+.input-group {
+    margin-bottom: 15px;
+}
+
+.input-group label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: var(--text-main);
+}
+
+.input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.input-wrapper i {
+    position: absolute;
+    left: 15px;
+    color: #4B5563;
+}
+
+.input-wrapper input {
+    width: 100%;
+    padding: 14px 14px 14px 45px;
+    background-color: var(--bg-input);
+    border: none;
+    border-radius: 4px;
+    font-size: 1rem;
+    outline: none;
+    transition: 0.3s;
+}
+
+.input-wrapper input:focus {
+    box-shadow: 0 0 0 2px #3B82F633;
+}
+
+/* Button */
+.btn-submit {
+    width: 100%;
+    padding: 14px;
+    background-color: var(--btn-color);
+    border: none;
+    border-radius: 4px;
+    color: var(--text-main);
+    font-weight: bold;
+    font-size: 1rem;
+    cursor: pointer;
+    margin-top: 20px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    transition: 0.3s;
+}
+
+.btn-submit:hover {
+    background-color: #7A9CE0;
+}
+
+.footer-text {
+    text-align: center;
+    margin-top: 25px;
+    font-size: 0.9rem;
+    color: var(--text-muted);
+}
+
+.footer-text a {
+    color: #000;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .container { flex-direction: column; }
+    .hero-section { display: none; } /* Sembunyikan gambar di HP agar fokus ke form */
+}

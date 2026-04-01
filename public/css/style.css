@@ -1,0 +1,548 @@
+.main {
+    position: relative;
+    z-index: 1;
+}
+
+.header {
+    position: relative;
+    z-index: 1;
+}
+.menu a {
+    display: block;
+    padding: 10px;
+    text-decoration: none;
+    color: black;
+}
+
+.menu a:hover {
+    background: #bfc9d9;
+}
+
+/* CSS Login*/
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Inter', sans-serif;
+}
+
+body {
+    background-color: #f0f2f5;
+}
+
+.login-container {
+    display: flex;
+    min-height: 100vh;
+}
+
+.left-section {
+    flex: 1.2;
+    background-color: #d1d5db; 
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 800;
+    font-size: 1.2rem;
+}
+
+.brand i {
+    font-size: 2rem;
+    color: #3b82f6;
+}
+
+.hero-content {
+    margin: auto;
+    text-align: left;
+    max-width: 500px;
+}
+
+.hero-content h1 {
+    font-size: 2.5rem;
+    color: #1f2937;
+}
+
+.hero-content h2 {
+    font-size: 1.8rem;
+    font-weight: 500;
+    margin-bottom: 10px;
+}
+
+.hero-content p {
+    color: #4b5563;
+    margin-bottom: 30px;
+}
+
+.hero-content img {
+    width: 100%;
+    max-width: 450px;
+    mix-blend-mode: multiply; 
+}
+
+/* BAGIAN KANAN */
+.right-section {
+    flex: 0.8;
+    background-color: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.login-box {
+    width: 100%;
+    max-width: 400px;
+    padding: 20px;
+}
+
+.login-box h3 {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 5px;
+}
+
+.subtitle {
+    color: #6b7280;
+    margin-bottom: 30px;
+}
+
+.input-group {
+    margin-bottom: 20px;
+}
+
+.input-group label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 8px;
+    font-size: 1.1rem;
+}
+
+.input-wrapper {
+    display: flex;
+    align-items: center;
+    background-color: #d1d5db; 
+    padding: 12px 15px;
+    border-radius: 4px;
+}
+
+.input-wrapper i {
+    color: #374151;
+    margin: 0 10px;
+}
+
+.input-wrapper input {
+    background: transparent;
+    border: none;
+    outline: none;
+    width: 100%;
+    font-size: 1rem;
+}
+
+/* TOMBOL MASUK */
+.btn-login {
+    width: 70%;
+    display: block;
+    margin: 40px auto 20px;
+    background-color: #8da9e9; 
+    color: #000;
+    border: none;
+    padding: 12px;
+    border-radius: 4px;
+    font-size: 1.1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.btn-login:hover {
+    background-color: #7a97d6;
+}
+
+.footer-text {
+    text-align: center;
+    color: #4b5563;
+}
+
+.footer-text a {
+    color: #000;
+    text-decoration: none;
+    font-weight: 800;
+}
+
+/* Responsif Mobile */
+@media (max-width: 768px) {
+    .login-container {
+        flex-direction: column;
+    }
+    .left-section {
+        display: none; /* Sembunyikan visual di layar kecil agar fokus ke form */
+    }
+}
+
+/* CSS REGISTER */
+.container {
+    display: flex;
+    min-height: 100vh;
+}
+
+/* BAGIAN KIRI */
+.left-side {
+    flex: 1.2;
+    background-color: #d1d5db; /* Warna abu-abu sesuai gambar */
+    padding: 50px;
+    display: flex;
+    flex-direction: column;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-weight: 800;
+    font-size: 1.2rem;
+    margin-bottom: 60px;
+}
+
+.logo i {
+    font-size: 2.5rem;
+    color: #3b82f6; /* Warna biru icon buku */
+}
+
+.hero-text h1 {
+    font-size: 2.2rem;
+    color: #000;
+    margin-bottom: 10px;
+}
+
+.hero-text p {
+    color: #4b5563;
+    font-size: 1.1rem;
+}
+
+.hero-image {
+    margin-top: auto;
+    display: flex;
+    justify-content: center;
+}
+
+.hero-image img {
+    max-width: 100%;
+    height: auto;
+    mix-blend-mode: multiply; 
+}
+
+/* BAGIAN KANAN */
+.right-side {
+    flex: 0.8;
+    background-color: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px;
+}
+
+.form-box {
+    width: 100%;
+    max-width: 400px;
+}
+
+.form-box h2 {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 5px;
+}
+
+.subtitle {
+    color: #6b7280;
+    margin-bottom: 30px;
+}
+
+.input-group {
+    margin-bottom: 20px;
+}
+
+.input-group label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: #000;
+}
+
+.input-container {
+    display: flex;
+    align-items: center;
+    background-color: #d1d5db; /* Warna input abu-abu */
+    border-radius: 4px;
+    padding: 12px 15px;
+}
+
+.input-container i {
+    color: #374151;
+    margin-right: 12px;
+    width: 18px;
+    text-align: center;
+}
+
+.input-container input {
+    background: transparent;
+    border: none;
+    outline: none;
+    width: 100%;
+    font-size: 0.95rem;
+}
+
+/* TOMBOL DAFTAR */
+.btn-daftar {
+    width: 60%;
+    display: block;
+    margin: 40px auto 20px;
+    background-color: #8da9e9; 
+    color: #000;
+    border: none;
+    padding: 14px;
+    border-radius: 4px;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: opacity 0.2s;
+}
+
+.btn-daftar:hover {
+    opacity: 0.8;
+}
+
+.login-redirect {
+    text-align: center;
+    font-size: 0.9rem;
+    color: #374151;
+}
+
+.login-redirect a {
+    text-decoration: none;
+    color: #000;
+    font-weight: 800;
+}
+
+/* RESPONSIVE */
+@media (max-width: 900px) {
+    .left-side {
+        display: none; 
+    }
+}
+
+/* CSS DASHBOARD */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Container */
+.container {
+    display: flex;
+}
+
+/* Sidebar */
+.sidebar {
+    width: 250px;
+    height: 100vh;
+    background: #cfd8e3;
+    padding: 20px;     
+}
+
+.logo {
+    font-weight: bold;
+    margin-bottom: 30px;
+}
+
+.menu li {
+    list-style: none;
+    margin: 15px 0;
+    cursor: pointer;
+}
+
+/* Main */
+.main {
+    flex: 1;
+    padding: 20px;
+}
+
+/* Header */
+.header {
+    display: flex;
+    justify-content: space-between;
+    padding: 15px;
+    background: #cfd8e3;
+}
+
+.search {
+    background: #eee;
+    padding: 8px;
+    border-radius: 5px;
+}
+
+.search input {
+    border: none;
+    outline: none;
+    background: transparent;
+}
+
+.profile {
+    font-size: 24px;
+}
+
+/* Content */
+.content {
+    padding: 20px;
+}
+
+.cards {
+    display: flex;
+    gap: 20px;
+    margin: 20px 0;
+}
+
+.card {
+    background: #fff;
+    padding: 20px;
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    width: 250px;
+    border-radius: 5px;
+}
+
+/* Books */
+.books {
+    display: flex;
+    gap: 20px;
+}
+
+.book {
+    background: #fff;
+    padding: 10px;
+    text-align: center;
+}
+
+.book img {
+    width: 150px;
+    height: 200px;
+    object-fit: cover;
+}
+
+.btn {
+    margin-top: 10px;
+}
+
+.detail {
+    background: #eee;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+}
+
+.pinjam {
+    background: #2d5be3;
+    color: #fff;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+}
+
+/* CSS KOLEKSI BUKU */
+.book {
+    position: relative;
+    display: inline-block; 
+    margin: 10px;
+    padding: 10px;
+    background: #fff;
+    border-radius: 8px;
+    overflow: hidden; 
+}
+
+/* Styling untuk label stok */
+.stock-tag {
+    position: absolute;
+    top: 10px;    
+    right: 10px;  
+    background-color: rgba(46, 204, 113, 0.9);
+    color: white;
+    padding: 4px 8px;
+    font-size: 12px;
+    font-weight: bold;
+    border-radius: 4px;
+    z-index: 10;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+.stock-out {
+    background-color: rgba(231, 76, 60, 0.9);
+}
+.detail-page {
+    padding: 20px;
+}
+
+.detail-page img {
+    border-radius: 10px;
+    margin-bottom: 10px;
+}
+.books {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.book {
+    background: #fff;
+    padding: 10px;
+    border-radius: 8px;
+    width: 160px;
+    text-align: center;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.book img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+}
+
+.book p {
+    margin: 10px 0;
+    font-weight: 500;
+}
+
+/* CSS DETAIL BUKU */
+.detail-page {
+    padding: 20px;
+}
+
+.detail-page img {
+    border-radius: 10px;
+    margin-bottom: 10px;
+}
+
+.detail-container {
+    display: flex;
+    gap: 40px;
+    margin-top: 20px;
+}
+
+.detail-image img {
+    width: 250px;
+    height: 350px;
+    object-fit: cover;
+    border-radius: 10px;
+}
+
+.detail-info {
+    max-width: 500px;
+}
+
+.detail-info h2 {
+    margin-bottom: 10px;
+}
