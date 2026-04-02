@@ -26,9 +26,18 @@
         <div class="detail-info">
             <h2>{{ $book['judul'] }}</h2>
 
-            <p><strong>Penulis:</strong> {{ $book['penulis'] ?? '-' }}</p>
-            <p><strong>Tahun:</strong> {{ $book['tahun'] ?? '-' }}</p>
-            <p><strong>Stok:</strong> {{ $book['stok'] ?? '-' }}</p>
+        <div class="info-item">
+            <span class="label">Penulis</span>
+            <span class="value">: {{ $book['penulis'] ?? '-' }}</span>
+        </div>
+        <div class="info-item">
+            <span class="label">Tahun Terbit</span>
+            <span class="value">: {{ $book['tahun'] ?? '-' }}</span>
+        </div>
+        <div class="info-item">
+            <span class="label">Stok</span>
+            <span class="value">: {{ $book['stok'] ?? '-' }}</span>
+        </div>
 
             <br>
 

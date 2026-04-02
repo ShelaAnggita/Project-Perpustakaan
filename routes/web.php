@@ -36,6 +36,15 @@ Route::get('/logout', function () {
     return redirect('/');
 });
 
+// Peminjaman
+Route::get('/peminjaman', [PeminjamanController::class, 'index'])->name('peminjaman');
+
+// tombol pinjam
+Route::post('/pinjam', [PeminjamanController::class, 'store'])->name('pinjam');
+
+// tombol kembalikan
+Route::delete('/kembalikan/{id}', [PeminjamanController::class, 'destroy'])->name('kembalikan');
+
 // Pengembalian
 Route::get('/pengembalian', [PengembalianController::class, 'pengembalian'])->name('pengembalian');
 Route::post('/pengembalian/{id}', [PengembalianController::class, 'prosesKembali'])->name('proses-kembali');

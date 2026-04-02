@@ -517,6 +517,20 @@ body {
 }
 
 /* CSS DETAIL BUKU */
+.info-item {
+    display: flex;
+    margin-bottom: 8px;
+}
+
+.label {
+    width: 120px; /* atur sesuai kebutuhan */
+    font-weight: bold;
+}
+
+.value {
+    flex: 1;
+}
+
 .detail-page {
     padding: 20px;
 }
@@ -545,4 +559,71 @@ body {
 
 .detail-info h2 {
     margin-bottom: 10px;
+}
+
+/* CSS PEMINJAMAN */
+.content {
+    padding: 20px;
+}
+
+.content h2 {
+    margin-bottom: 20px;
+}
+
+/* BOOK LIST */
+.books {
+    display: flex;
+    gap: 30px;
+}
+
+/* CARD */
+.book {
+    background: #fff;
+    padding: 15px;
+    border-radius: 6px;
+    width: 200px;
+    text-align: center;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+/* IMAGE */
+.book img {
+    width: 150px;
+    height: 220px;
+    object-fit: cover;
+}
+
+/* TITLE */
+.book p {
+    margin: 10px 0;
+    font-weight: bold;
+}
+
+/* BUTTON AREA */
+.btn {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
+/* DETAIL BUTTON */
+.detail {
+    background: #eee;
+    border: none;
+    padding: 6px 12px;
+    cursor: pointer;
+}
+
+/* KEMBALIKAN BUTTON */
+.kembali {
+    background: #2d5be3;
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    cursor: pointer;
+}
+
+/* HOVER */
+.kembali:hover {
+    background: #1f45b5;
 }
