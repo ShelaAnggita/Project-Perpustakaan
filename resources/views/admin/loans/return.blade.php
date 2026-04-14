@@ -31,13 +31,9 @@
                         <td>Rp {{ number_format($item->denda, 0, ',', '.') }}</td>
                         <td>
                             <div class="actions">
-                                <form action="{{ route($panel.'.returns.approve', $item) }}" method="POST" style="display:inline-block; margin-right: 8px;">
+                                <form action="{{ route($panel.'.returns.approve', $item) }}" method="POST" style="display:inline-block;">
                                     @csrf
                                     <button class="btn btn-warning" type="submit">ACC</button>
-                                </form>
-                                <form action="{{ route($panel.'.returns.reject', $item) }}" method="POST" style="display:inline-block;">
-                                    @csrf
-                                    <button class="btn btn-danger" type="submit">Tolak</button>
                                 </form>
                             </div>
                         </td>

@@ -49,14 +49,14 @@ class PengembalianController extends Controller
         $kondisi = $request->kondisi;
         $lateDays = 0;
 
-        if ($kondisi === 'baik' && $batasKembali && $tanggalDikembalikan->gt($batasKembali)) {
+        if ($batasKembali && $tanggalDikembalikan->gt($batasKembali)) {
             $lateDays = $batasKembali->diffInDays($tanggalDikembalikan);
         }
 
         $denda = match ($kondisi) {
             'baik' => $lateDays * 2000,
-            'rusak' => 30000,
-            'hilang' => 100000,
+            'rusak' => 30000 + ($lateDays * 2000),
+            'hilang' => 100000 + ($lateDays * 2000),
         };
 
         $peminjaman->update([

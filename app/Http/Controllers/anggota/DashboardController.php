@@ -22,7 +22,10 @@ class DashboardController extends Controller
             ->get();
 
         $totalDenda = $user->peminjaman()
-            ->where('status', Peminjaman::STATUS_MENUNGGU_PENGEMBALIAN)
+            ->whereIn('status', [
+                Peminjaman::STATUS_MENUNGGU_PENGEMBALIAN,
+                Peminjaman::STATUS_DIKEMBALIKAN,
+            ])
             ->get()
             ->sum(fn (Peminjaman $peminjaman) => $peminjaman->denda_terhitung);
 
@@ -30,6 +33,7 @@ class DashboardController extends Controller
             'pinjamanAktif' => $pinjamanAktif,
             'totalDipinjam' => $pinjamanAktif->where('status', Peminjaman::STATUS_DIPINJAM)->count(),
             'totalMenunggu' => $pinjamanAktif->where('status', Peminjaman::STATUS_MENUNGGU_PERSETUJUAN)->count(),
+            'totalMenungguPengembalian' => $pinjamanAktif->where('status', Peminjaman::STATUS_MENUNGGU_PENGEMBALIAN)->count(),
             'totalDenda' => $totalDenda,
         ]);
     }

@@ -144,19 +144,5 @@ class LoanApprovalController extends Controller
 
         return back()->with('success', 'Pengembalian berhasil dikonfirmasi.');
     }
-
-    public function rejectReturn(Peminjaman $peminjaman): RedirectResponse
-    {
-        if ($peminjaman->status !== Peminjaman::STATUS_MENUNGGU_PENGEMBALIAN) {
-            return back()->withErrors(['pengembalian' => 'Pengembalian ini tidak dapat ditolak.']);
-        }
-
-        $peminjaman->update([
-            'status' => Peminjaman::STATUS_DITOLAK,
-            'catatan' => trim(($peminjaman->catatan ? $peminjaman->catatan.' ' : '').'Pengembalian ditolak petugas.'),
-        ]);
-
-        return back()->with('success', 'Pengembalian telah ditolak.');
-    }
 }
 

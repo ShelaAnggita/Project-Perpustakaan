@@ -15,6 +15,10 @@
         <h2>{{ $totalMenunggu }}</h2>
     </div>
     <div class="card">
+        <div class="muted">Menunggu Pengembalian</div>
+        <h2>{{ $totalMenungguPengembalian }}</h2>
+    </div>
+    <div class="card">
         <div class="muted">Total Denda Saat Ini</div>
         <h2>Rp {{ number_format($totalDenda, 0, ',', '.') }}</h2>
     </div>
@@ -29,14 +33,22 @@
                     <th>Buku</th>
                     <th>Status</th>
                     <th>Batas Kembali</th>
+                    <th>Denda</th>
                 </tr>
             </thead>
             <tbody>
                 @forelse($pinjamanAktif as $item)
                     <tr>
-                        <td>{{ $item->judul }}</td>
+                        <td>{{ $item->book->judul ?? $item->judul ?? '-' }}</td>
                         <td><span class="badge {{ $item->status === 'dipinjam' ? 'success' : ($item->status === 'menunggu_pengembalian' ? 'warn' : 'info') }}">{{ ucwords(str_replace('_', ' ', $item->status)) }}</span></td>
                         <td>{{ $item->batas_kembali?->format('d M Y H:i') ?? '-' }}</td>
+                        <td>
+                            @if(in_array($item->status, [\App\Models\Peminjaman::STATUS_MENUNGGU_PENGEMBALIAN, \App\Models\Peminjaman::STATUS_DIKEMBALIKAN]))
+                                Rp {{ number_format($item->denda_terhitung, 0, ',', '.') }}
+                            @else
+                                -
+                            @endif
+                        </td>
                     </tr>
                 @empty
                     <tr><td colspan="3" class="muted">Belum ada pinjaman aktif.</td></tr>

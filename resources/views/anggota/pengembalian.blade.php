@@ -132,18 +132,20 @@
 
         let denda = 0;
 
-        if (kondisi === 'baik' && batas) {
+        if (batas) {
             const kembali = parseDateYMD(tglKembali);
             const batasKembali = parseDateYMD(batas);
             const diffTime = kembali - batasKembali;
             const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
             if (diffDays > 0) {
-                denda = diffDays * 2000;
+                denda += diffDays * 2000;
             }
-        } else if (kondisi === 'rusak') {
-            denda = 30000;
+        }
+
+        if (kondisi === 'rusak') {
+            denda += 30000;
         } else if (kondisi === 'hilang') {
-            denda = 100000;
+            denda += 100000;
         }
 
         estimasi.textContent = new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(denda);

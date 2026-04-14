@@ -64,7 +64,6 @@ Route::middleware(['auth', 'role:petugas'])->prefix('petugas')->name('petugas.')
 
     Route::get('/pengembalian', [LoanApprovalController::class, 'returnIndex'])->name('returns.index');
     Route::post('/pengembalian/{peminjaman}/setujui', [LoanApprovalController::class, 'approveReturn'])->name('returns.approve');
-    Route::post('/pengembalian/{peminjaman}/tolak', [LoanApprovalController::class, 'rejectReturn'])->name('returns.reject');
 
     Route::get('/anggota', [MemberController::class, 'index'])->name('members.index');
 });
@@ -81,7 +80,6 @@ Route::middleware(['auth', 'role:kepala_perpustakaan'])->prefix('kepala-perpusta
     Route::post('/peminjaman/{peminjaman}/tolak', [LoanApprovalController::class, 'rejectBorrow'])->name('borrow.reject');
     Route::get('/pengembalian', [LoanApprovalController::class, 'returnIndex'])->name('returns.index');
     Route::post('/pengembalian/{peminjaman}/setujui', [LoanApprovalController::class, 'approveReturn'])->name('returns.approve');
-    Route::post('/pengembalian/{peminjaman}/tolak', [LoanApprovalController::class, 'rejectReturn'])->name('returns.reject');
     Route::get('/anggota', [MemberController::class, 'index'])->defaults('panel', 'kepala')->name('members.index');
     Route::get('/petugas', [PetugasController::class, 'index'])->name('staff.index');
     Route::post('/petugas', [PetugasController::class, 'store'])->name('staff.store');
