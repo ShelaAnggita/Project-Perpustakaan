@@ -1,60 +1,159 @@
-@extends('layouts.main')
+@extends('layouts.app')
+
+@section('title', 'Pengembalian Buku')
+@section('page_title', 'Pengembalian Buku')
+@section('page_description', 'Pengajuan pengembalian akan diperiksa petugas. Jika telat, denda muncul saat petugas memproses.')
 
 @section('content')
+<div class="panel panel--spaced">
+    <h3>Pengembalian Buku</h3>
+    <p class="muted">Isi pengembalian dengan tanggal kembali dan kondisi buku. Denda otomatis dihitung sesuai aturan.</p>
 
-<header class="header">
-    <div class="search">
-        <i class="fa fa-search"></i>
-        <input type="text" placeholder="Cari data pengembalian...">
-    </div>
-    <div class="profile">
-        <i class="fa fa-user-circle"></i>
-    </div>
-</header>
+    @php
+        $openReturns = $pinjaman->where('status', 'dipinjam');
+        $waitingReturns = $pinjaman->where('status', 'menunggu_pengembalian');
+    @endphp
 
-<section class="content">
-    <h2>Form Pengembalian Buku</h2>
-    <p>Berikut adalah daftar buku yang sedang Anda pinjam. Silakan klik tombol kembalikan jika ingin mengembalikan buku.</p>
+    @if($openReturns->isEmpty())
+        <div class="panel">Tidak ada buku yang dapat diajukan pengembaliannya saat ini.</div>
+    @else
+        <div class="grid-2">
+            @foreach($openReturns as $item)
+                <div class="card">
+                    <form action="{{ route('anggota.returns.store', $item) }}" method="POST">
+                        @csrf
 
-    <div class="table-container" style="background: white; padding: 20px; border-radius: 10px; margin-top: 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
-        <table style="width: 100%; border-collapse: collapse;">
-            <thead>
-                <tr style="border-bottom: 2px solid #f4f4f4; text-align: left;">
-                    <th style="padding: 12px;">Cover</th>
-                    <th style="padding: 12px;">Judul Buku</th>
-                    <th style="padding: 12px;">Tanggal Pinjam</th>
-                    <th style="padding: 12px;">Batas Kembali</th>
-                    <th style="padding: 12px;">Aksi</th>
-                </tr>
-            </thead>
-            <tbody>
-                @forelse($pinjaman as $item)
-                <tr style="border-bottom: 1px solid #eee;">
-                    <td style="padding: 12px;">
-                        <img src="{{ asset('image/' . $item->book->gambar) }}" width="50" style="border-radius: 5px;">
-                    </td>
-                    <td style="padding: 12px; font-weight: bold;">{{ $item->book->judul }}</td>
-                    <td style="padding: 12px;">{{ $item->tanggal_pinjam }}</td>
-                    <td style="padding: 12px;">{{ $item->tanggal_kembali }}</td>
-                    <td style="padding: 12px;">
-                        <form action="{{ route('proses-kembali', $item->id) }}" method="POST">
-                            @csrf
-                            <button type="submit" class="pinjam" style="background-color: #e74c3c; border: none; padding: 8px 15px; color: white; border-radius: 5px; cursor: pointer;">
-                                <i class="fa fa-undo"></i> Kembalikan
-                            </button>
-                        </form>
-                    </td>
-                </tr>
-                @empty
-                <tr>
-                    <td colspan="5" style="text-align: center; padding: 20px; color: #888;">
-                        Anda tidak memiliki pinjaman buku yang aktif.
-                    </td>
-                </tr>
-                @endforelse
-            </tbody>
-        </table>
-    </div>
-</section>
+                        <div class="field">
+                            <label>Judul Buku</label>
+                            <input type="text" value="{{ $item->judul }}" readonly>
+                        </div>
 
+                        <div class="field">
+                            <label>Tanggal Pinjam</label>
+                            <input type="text" value="{{ $item->tanggal_pinjam?->format('d M Y') ?? '-' }}" readonly>
+                        </div>
+
+                        <div class="field">
+                            <label for="tanggal_dikembalikan_{{ $item->id }}">Tanggal Kembali</label>
+                            <input
+                                id="tanggal_dikembalikan_{{ $item->id }}"
+                                type="date"
+                                name="tanggal_dikembalikan"
+                                value="{{ now()->format('Y-m-d') }}"
+                                min="{{ $item->tanggal_pinjam?->format('Y-m-d') ?? now()->format('Y-m-d') }}"
+                                onchange="updateEstimasiDenda({{ $item->id }})"
+                                oninput="updateEstimasiDenda({{ $item->id }})"
+                                required
+                            />
+                        </div>
+
+                        <div class="field">
+                            <label for="kondisi_{{ $item->id }}">Kondisi Buku</label>
+                            <select
+                                id="kondisi_{{ $item->id }}"
+                                name="kondisi"
+                                onchange="updateEstimasiDenda({{ $item->id }})"
+                                required
+                            >
+                                <option value="baik">Baik</option>
+                                <option value="rusak">Rusak</option>
+                                <option value="hilang">Hilang</option>
+                            </select>
+                        </div>
+
+                        <div class="field">
+                            <label>Estimasi Denda</label>
+                            <p><strong id="estimasi_denda_{{ $item->id }}">Rp 0</strong></p>
+                        </div>
+
+                        <div class="actions">
+                            <button class="btn btn-warning" type="submit">Ajukan Pengembalian</button>
+                        </div>
+
+                        <input type="hidden" id="batas_kembali_{{ $item->id }}" value="{{ $item->batas_kembali?->format('Y-m-d') ?? '' }}" />
+                    </form>
+                </div>
+            @endforeach
+        </div>
+    @endif
+</div>
+
+<div class="panel">
+    <h3>Status Pengembalian</h3>
+    <p class="muted">Riwayat dan pengajuan yang sedang menunggu ACC petugas.</p>
+
+    @if($waitingReturns->isEmpty())
+        <div class="panel">Belum ada pengajuan pengembalian.</div>
+    @else
+        <div class="table-wrap">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Buku</th>
+                        <th>Tanggal Pinjam</th>
+                        <th>Tanggal Kembali</th>
+                        <th>Kondisi</th>
+                        <th>Denda</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach($waitingReturns as $item)
+                        <tr>
+                            <td>{{ $item->judul }}</td>
+                            <td>{{ $item->tanggal_pinjam?->format('d M Y') ?? '-' }}</td>
+                            <td>{{ $item->tanggal_dikembalikan?->format('d M Y') ?? '-' }}</td>
+                            <td>{{ isset($item->catatan) ? explode('.', str_replace('Kondisi: ', '', $item->catatan))[0] : '-' }}</td>
+                            <td>Rp {{ number_format($item->denda, 0, ',', '.') }}</td>
+                            <td><span class="badge warn">Menunggu ACC Petugas</span></td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
+    @endif
+</div>
+
+<script>
+    function updateEstimasiDenda(id) {
+        const tglKembali = document.getElementById(`tanggal_dikembalikan_${id}`)?.value;
+        const kondisi = document.getElementById(`kondisi_${id}`)?.value;
+        const batas = document.getElementById(`batas_kembali_${id}`)?.value;
+        const estimasi = document.getElementById(`estimasi_denda_${id}`);
+
+        if (!estimasi || !tglKembali || !kondisi) {
+            return;
+        }
+
+        function parseDateYMD(value) {
+            const [year, month, day] = value.split('-').map(Number);
+            return new Date(year, month - 1, day);
+        }
+
+        let denda = 0;
+
+        if (kondisi === 'baik' && batas) {
+            const kembali = parseDateYMD(tglKembali);
+            const batasKembali = parseDateYMD(batas);
+            const diffTime = kembali - batasKembali;
+            const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+            if (diffDays > 0) {
+                denda = diffDays * 2000;
+            }
+        } else if (kondisi === 'rusak') {
+            denda = 30000;
+        } else if (kondisi === 'hilang') {
+            denda = 100000;
+        }
+
+        estimasi.textContent = new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(denda);
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+        document.querySelectorAll('[id^="tanggal_dikembalikan_"]').forEach(input => {
+            const id = input.id.replace('tanggal_dikembalikan_', '');
+            updateEstimasiDenda(id);
+        });
+    });
+</script>
 @endsection

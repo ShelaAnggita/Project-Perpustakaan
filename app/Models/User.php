@@ -4,12 +4,17 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
 class User extends Authenticatable
 {
     use HasFactory, Notifiable;
+
+    public const ROLE_ANGGOTA = 'anggota';
+    public const ROLE_PETUGAS = 'petugas';
+    public const ROLE_KEPALA = 'kepala_perpustakaan';
 
     /**
      * The attributes that are mass assignable.
@@ -45,5 +50,25 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    public function peminjaman(): HasMany
+    {
+        return $this->hasMany(Peminjaman::class);
+    }
+
+    public function isAnggota(): bool
+    {
+        return $this->role === self::ROLE_ANGGOTA;
+    }
+
+    public function isPetugas(): bool
+    {
+        return $this->role === self::ROLE_PETUGAS;
+    }
+
+    public function isKepala(): bool
+    {
+        return $this->role === self::ROLE_KEPALA;
     }
 }

@@ -4,8 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\User; 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash; 
-
 class RegisterController extends Controller
 {
     public function register()
@@ -13,17 +11,18 @@ class RegisterController extends Controller
         return view('register.index');
     }
 
-    public function store(Request $request) {
+    public function store(Request $request)
+    {
         $request->validate([
-            'nama_lengkap' => 'required',
+            'nama_lengkap' => 'required|min:3',
             'email' => 'required|email|unique:users',
-            'password' => 'required|min:6',
+            'password' => 'required|min:6|confirmed',
         ]);
 
         User::create([
             'nama_lengkap' => $request->nama_lengkap,
             'email' => $request->email,
-            'password' => Hash::make($request->password),
+            'password' => $request->password,
             'role' => 'anggota',
         ]);
 

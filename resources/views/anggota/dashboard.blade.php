@@ -1,93 +1,57 @@
-@extends('layouts.main')
+@extends('layouts.app')
+
+@section('title', 'Dashboard Anggota')
+@section('page_title', 'Dashboard Anggota')
+@section('page_description', 'Pantau buku yang sedang dipinjam, menunggu konfirmasi, dan total denda Anda.')
 
 @section('content')
-
-<header class="header">
-    <div class="search">
-        <i class="fa fa-search"></i>
-        <input type="text" placeholder="Cari buku...">
+<div class="card-grid">
+    <div class="card">
+        <div class="muted">Sedang Dipinjam</div>
+        <h2>{{ $totalDipinjam }}</h2>
     </div>
-    <div class="profile">
-        <i class="fa fa-user-circle"></i>
+    <div class="card">
+        <div class="muted">Menunggu Konfirmasi</div>
+        <h2>{{ $totalMenunggu }}</h2>
     </div>
-</header>
-
-<section class="content">
-    <h2>Dashboard</h2>
-
-    <div class="cards">
-        <div class="card">
-            ⭐
-            <div>
-                <p>Sedang Dipinjam</p>
-                <h3>2 Buku</h3>
-            </div>
-        </div>
-
-        <div class="card">
-            ⏰
-            <div>
-                <p>Hampir Jatuh Tempo</p>
-                <h3>0 Buku</h3>
-            </div>
-        </div>
-
-        <div class="card">
-            💰
-            <div>
-                <p>Denda</p>
-                <h3>Rp 0</h3>
-            </div>
-        </div>
+    <div class="card">
+        <div class="muted">Total Denda Saat Ini</div>
+        <h2>Rp {{ number_format($totalDenda, 0, ',', '.') }}</h2>
     </div>
+</div>
 
-    <h3>Rekomendasi Untuk Anda</h3>
-
-    <div class="books">
-        <div class="book">
-            <img src="{{ asset('image/PAI.jpg') }}">
-            <p>Pendidikan Agama</p>
-            <div class="btn" style="display: flex; gap: 5px; justify-content: center;">
-                <a href="{{ route('detail.buku', 3) }}">
-                    <button class="detail">Detail</button>
-                </a>
-                <button class="pinjam">Pinjam</button>
-            </div>
-        </div>
-
-        <div class="book">
-            <img src="{{ asset('image/Matematika.jpg') }}">
-            <p>Matematika</p>
-            <div class="btn" style="display: flex; gap: 5px; justify-content: center;">
-                <a href="{{ route('detail.buku', 3) }}">
-                    <button class="detail">Detail</button>
-                </a>
-                <button class="pinjam">Pinjam</button>
-            </div>
-        </div>
-
-        <div class="book">
-            <img src="{{ asset('image/Dilan.jpg') }}">
-            <p>Dilan 1990</p>
-            <div class="btn" style="display: flex; gap: 5px; justify-content: center;">
-                <a href="{{ route('detail.buku', 3) }}">
-                    <button class="detail">Detail</button>
-                </a>
-                <button class="pinjam">Pinjam</button>
-            </div>
-        </div>
-
-        <div class="book">
-            <img src="{{ asset('image/Angkasa.jpg') }}">
-            <p>Angkasa & 56 Hari</p>
-            <div class="btn" style="display: flex; gap: 5px; justify-content: center;">
-                <a href="{{ route('detail.buku', 3) }}">
-                    <button class="detail">Detail</button>
-                </a>
-                <button class="pinjam">Pinjam</button>
-            </div>
-        </div>
+<div class="panel" style="margin-bottom:20px;">
+    <h3>Pinjaman Aktif</h3>
+    <div class="table-wrap">
+        <table>
+            <thead>
+                <tr>
+                    <th>Buku</th>
+                    <th>Status</th>
+                    <th>Batas Kembali</th>
+                </tr>
+            </thead>
+            <tbody>
+                @forelse($pinjamanAktif as $item)
+                    <tr>
+                        <td>{{ $item->judul }}</td>
+                        <td><span class="badge {{ $item->status === 'dipinjam' ? 'success' : ($item->status === 'menunggu_pengembalian' ? 'warn' : 'info') }}">{{ ucwords(str_replace('_', ' ', $item->status)) }}</span></td>
+                        <td>{{ $item->batas_kembali?->format('d M Y H:i') ?? '-' }}</td>
+                    </tr>
+                @empty
+                    <tr><td colspan="3" class="muted">Belum ada pinjaman aktif.</td></tr>
+                @endforelse
+            </tbody>
+        </table>
     </div>
-</section>
+</div>
 
+<div class="panel">
+    <h3>Akses Cepat</h3>
+    <div class="actions">
+        <a class="btn btn-primary" href="{{ route('anggota.books.index') }}">Buka Katalog Buku</a>
+        <a class="btn btn-secondary" href="{{ route('anggota.borrow.index') }}">Lihat Peminjaman</a>
+        <a class="btn btn-secondary" href="{{ route('anggota.returns.index') }}">Lihat Pengembalian</a>
+    </div>
+</div>
 @endsection

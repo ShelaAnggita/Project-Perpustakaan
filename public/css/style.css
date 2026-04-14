@@ -332,6 +332,20 @@ body {
     .left-side {
         display: none; 
     }
+    .container {
+        flex-direction: column;
+    }
+    .sidebar {
+        width: 100%;
+        height: auto;
+    }
+    .header {
+        position: relative;
+    }
+    .books {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    }
 }
 
 /* CSS DASHBOARD */
@@ -344,6 +358,7 @@ body {
 /* Container */
 .container {
     display: flex;
+    min-height: 100vh;
 }
 
 /* Sidebar */
@@ -351,7 +366,11 @@ body {
     width: 250px;
     height: 100vh;
     background: #cfd8e3;
-    padding: 20px;     
+    padding: 20px;    
+    position: sticky;
+    top: 0;
+    align-self: flex-start;
+    overflow-y: auto;
 }
 
 .logo {
@@ -369,6 +388,8 @@ body {
 .main {
     flex: 1;
     padding: 20px;
+    min-height: 100vh;
+    overflow-y: auto;
 }
 
 /* Header */
@@ -377,6 +398,9 @@ body {
     justify-content: space-between;
     padding: 15px;
     background: #cfd8e3;
+    position: sticky;
+    top: 0;
+    z-index: 5;
 }
 
 .search {
@@ -516,6 +540,64 @@ body {
     font-weight: 500;
 }
 
+.password-wrapper {
+    position: relative;
+}
+
+.password-wrapper input {
+    width: 100%;
+    padding-right: 40px;
+}
+
+.toggle-password {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.pagination {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    list-style: none;
+    padding: 0;
+    margin: 20px 0 0;
+}
+
+.pagination li {
+    display: inline-flex;
+}
+
+.pagination li a,
+.pagination li span {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 36px;
+    padding: 8px 12px;
+    border: 1px solid #d1d5db;
+    border-radius: 10px;
+    color: #111827;
+    text-decoration: none;
+    background: #fff;
+}
+
+.pagination li.active span {
+    background: #0f766e;
+    color: #fff;
+    border-color: #0f766e;
+}
+
+.pagination li.disabled span {
+    opacity: .5;
+    cursor: not-allowed;
+}
+
 /* CSS DETAIL BUKU */
 .info-item {
     display: flex;
@@ -626,4 +708,96 @@ body {
 /* HOVER */
 .kembali:hover {
     background: #1f45b5;
+}
+
+/* ================= DASHBOARD PETUGAS (TAMBAHAN) ================= */
+
+/* Layout utama */
+.dashboard-wrapper {
+    display: flex;
+}
+
+/* Sidebar khusus petugas */
+.sidebar {
+    width: 220px;
+    height: 100vh;
+    background: #e5e7eb;
+    padding: 20px;
+}
+
+.sidebar h3 {
+    font-size: 14px;
+    margin-bottom: 30px;
+}
+
+.menu {
+    list-style: none;
+    padding: 0;
+}
+
+.menu li {
+    margin: 15px 0;
+}
+
+.menu a {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 14px;
+}
+
+/* Header */
+.header {
+    background: #e5e7eb;
+    border-radius: 5px;
+}
+
+.search input {
+    width: 300px;
+}
+
+/* Content dashboard */
+.dashboard-content {
+    flex: 1;
+    padding: 20px;
+    background: #d1d5db;
+    min-height: 100vh;
+}
+
+/* Card dashboard */
+.cards {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.card {
+    background: #fff;
+    padding: 15px;
+    border-radius: 6px;
+    width: 200px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* Icon dalam card */
+.card-icon {
+    font-size: 24px;
+}
+
+/* Text dalam card */
+.card-text p {
+    font-size: 13px;
+    margin-bottom: 5px;
+}
+
+.card-text b {
+    font-size: 14px;
+}
+
+/* Hover effect */
+.card:hover {
+    transform: translateY(-3px);
+    transition: 0.2s;
 }

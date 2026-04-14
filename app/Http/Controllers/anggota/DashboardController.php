@@ -3,12 +3,34 @@
 namespace App\Http\Controllers\anggota;
 
 use App\Http\Controllers\Controller;
-// use Illuminate\Http\Request;
+use App\Models\Peminjaman;
+use Illuminate\Support\Facades\Auth;
 
 class DashboardController extends Controller
 {
     public function index()
     {
-        return view('anggota.dasboard');
+        $user = Auth::user();
+        $pinjamanAktif = $user->peminjaman()
+            ->whereIn('status', [
+                Peminjaman::STATUS_MENUNGGU_PERSETUJUAN,
+                Peminjaman::STATUS_DIPINJAM,
+                Peminjaman::STATUS_MENUNGGU_PENGEMBALIAN,
+            ])
+            ->with('book')
+            ->latest()
+            ->get();
+
+        $totalDenda = $user->peminjaman()
+            ->where('status', Peminjaman::STATUS_MENUNGGU_PENGEMBALIAN)
+            ->get()
+            ->sum(fn (Peminjaman $peminjaman) => $peminjaman->denda_terhitung);
+
+        return view('anggota.dashboard', [
+            'pinjamanAktif' => $pinjamanAktif,
+            'totalDipinjam' => $pinjamanAktif->where('status', Peminjaman::STATUS_DIPINJAM)->count(),
+            'totalMenunggu' => $pinjamanAktif->where('status', Peminjaman::STATUS_MENUNGGU_PERSETUJUAN)->count(),
+            'totalDenda' => $totalDenda,
+        ]);
     }
 }

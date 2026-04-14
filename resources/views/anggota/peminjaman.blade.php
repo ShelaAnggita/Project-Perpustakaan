@@ -1,45 +1,39 @@
-@extends('layouts.main')
+@extends('layouts.app')
+
+@section('title', 'Peminjaman Saya')
+@section('page_title', 'Peminjaman Saya')
+@section('page_description', 'Status peminjaman akan berubah setelah dikonfirmasi petugas.')
 
 @section('content')
-
-<header class="header">
-    <div class="search">
-        <i class="fa fa-search"></i>
-        <input type="text" placeholder="Cari buku...">
+<div class="panel">
+    <div class="table-wrap">
+        <table>
+            <thead>
+                <tr>
+                    <th>Buku</th>
+                    <th>Status</th>
+                    <th>Tanggal Pinjam</th>
+                    <th>Batas Kembali</th>
+                    <th>Denda</th>
+                </tr>
+            </thead>
+            <tbody>
+                @forelse($peminjaman as $item)
+                    <tr>
+                        <td>
+                            <strong>{{ $item->judul }}</strong>
+                            <div class="muted">{{ $item->book->penulis ?? '-' }}</div>
+                        </td>
+                        <td><span class="badge {{ $item->status === 'dipinjam' ? 'success' : ($item->status === 'ditolak' ? 'danger' : 'info') }}">{{ ucwords(str_replace('_', ' ', $item->status)) }}</span></td>
+                        <td>{{ $item->tanggal_pinjam?->format('d M Y H:i') ?? '-' }}</td>
+                        <td>{{ $item->batas_kembali?->format('d M Y H:i') ?? '-' }}</td>
+                        <td>Rp {{ number_format($item->denda_terhitung, 0, ',', '.') }}</td>
+                    </tr>
+                @empty
+                    <tr><td colspan="5" class="muted">Belum ada data peminjaman.</td></tr>
+                @endforelse
+            </tbody>
+        </table>
     </div>
-    <div class="profile">
-        <i class="fa fa-user-circle"></i>
-    </div>
-</header>
-
-<section class="content">
-    <h2>Peminjaman Saya</h2>
-
-    <div class="books">
-
-
-        <div class="book">
-            <img src="{{ asset('image/Sejarah.jpg') }}">
-            <p>Hujan</p>
-
-            <div class="btn">
-                <button class="detail">Detail</button>
-                <button class="kembali">Kembalikan</button>
-            </div>
-        </div>
-
-        <!-- Buku 2 -->
-        <div class="book">
-            <img src="{{ asset('image/LaskarPelangi.jpg') }}">
-            <p>Laskar Pelangi</p>
-
-            <div class="btn">
-                <button class="detail">Detail</button>
-                <button class="kembali">Kembalikan</button>
-            </div>
-        </div>
-
-    </div>
-</section>
-
+</div>
 @endsection
