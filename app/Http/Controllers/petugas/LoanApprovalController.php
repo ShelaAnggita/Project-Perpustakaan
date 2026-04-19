@@ -4,6 +4,7 @@ namespace App\Http\Controllers\petugas;
 
 use App\Http\Controllers\Controller;
 use App\Models\Peminjaman;
+use Carbon\Carbon;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -100,19 +101,22 @@ class LoanApprovalController extends Controller
 
     public function returnIndex(Request $request): View
     {
-        $pendingReturns = Peminjaman::with(['user', 'book'])
-            ->where('status', Peminjaman::STATUS_MENUNGGU_PENGEMBALIAN)
+        $pendingApprovals = Peminjaman::with(['user', 'book'])
+            ->where('status', Peminjaman::STATUS_MENUNGGU_ACC)
             ->whereNotNull('user_id')
             ->whereNotNull('book_id')
             ->latest()
-            ->get()
-            ->each(fn (Peminjaman $item) => $item->denda = $item->denda_terhitung);
+            ->get();
+
+        $pendingVerifications = Peminjaman::with(['user', 'book'])
+            ->where('status', Peminjaman::STATUS_DISETUJUI)
+            ->whereNotNull('user_id')
+            ->whereNotNull('book_id')
+            ->latest()
+            ->get();
 
         $returnHistory = Peminjaman::with(['user', 'book'])
-            ->whereIn('status', [
-                Peminjaman::STATUS_DIPINJAM,
-                Peminjaman::STATUS_DIKEMBALIKAN,
-            ])
+            ->where('status', Peminjaman::STATUS_SELESAI)
             ->whereNotNull('user_id')
             ->whereNotNull('book_id')
             ->latest('tanggal_dikembalikan')
@@ -120,7 +124,8 @@ class LoanApprovalController extends Controller
             ->each(fn (Peminjaman $item) => $item->denda = $item->denda_terhitung);
 
         return view('admin.loans.return', [
-            'pendingReturns' => $pendingReturns,
+            'pendingApprovals' => $pendingApprovals,
+            'pendingVerifications' => $pendingVerifications,
             'returnHistory' => $returnHistory,
             'panel' => $request->is('kepala-perpustakaan/*') ? 'kepala' : 'petugas',
         ]);
@@ -128,21 +133,52 @@ class LoanApprovalController extends Controller
 
     public function approveReturn(Peminjaman $peminjaman): RedirectResponse
     {
-        if ($peminjaman->status !== Peminjaman::STATUS_MENUNGGU_PENGEMBALIAN) {
+        if ($peminjaman->status !== Peminjaman::STATUS_MENUNGGU_ACC) {
             return back()->withErrors(['pengembalian' => 'Pengembalian ini sudah diproses.']);
         }
 
-        $tanggalDikembalikan = $peminjaman->tanggal_dikembalikan ?? now();
-        $denda = $peminjaman->denda ?? $peminjaman->denda_terhitung;
-
         $peminjaman->update([
-            'status' => Peminjaman::STATUS_DIKEMBALIKAN,
-            'tanggal_dikembalikan' => $tanggalDikembalikan,
-            'denda' => $denda,
+            'status' => Peminjaman::STATUS_DISETUJUI,
             'catatan' => trim(($peminjaman->catatan ? $peminjaman->catatan.' ' : '').'Pengembalian disetujui petugas.'),
         ]);
 
-        return back()->with('success', 'Pengembalian berhasil dikonfirmasi.');
+        return back()->with('success', 'Pengembalian disetujui. Lanjut ke verifikasi kondisi.');
+    }
+
+    public function verifyCondition(Request $request, Peminjaman $peminjaman): RedirectResponse
+    {
+        if ($peminjaman->status !== Peminjaman::STATUS_DISETUJUI) {
+            return back()->withErrors(['verifikasi' => 'Pengembalian ini belum siap untuk verifikasi kondisi.']);
+        }
+
+        $request->validate([
+            'kondisi' => ['required', 'in:baik,rusak,hilang'],
+        ]);
+
+        $kondisi = $request->kondisi;
+        $tanggalDikembalikan = $peminjaman->tanggal_dikembalikan ?? now();
+        $batasKembali = $peminjaman->batas_kembali?->copy()->startOfDay();
+        $tglDikembalikan = Carbon::parse($tanggalDikembalikan)->startOfDay();
+
+        $lateDays = 0;
+        if ($batasKembali && $tglDikembalikan->gt($batasKembali)) {
+            $lateDays = $batasKembali->diffInDays($tglDikembalikan);
+        }
+
+        $denda = match ($kondisi) {
+            'baik' => $lateDays * 2000,
+            'rusak' => 30000 + ($lateDays * 2000),
+            'hilang' => 100000 + ($lateDays * 2000),
+        };
+
+        $peminjaman->update([
+            'status' => Peminjaman::STATUS_SELESAI,
+            'kondisi' => $kondisi,
+            'denda' => $denda,
+            'catatan' => trim(($peminjaman->catatan ? $peminjaman->catatan.' ' : '').'Verifikasi kondisi: '.ucfirst($kondisi).'.'),
+        ]);
+
+        return back()->with('success', 'Verifikasi kondisi selesai. Denda: Rp '.number_format($denda, 0, ',', '.').'.');
     }
 }
 

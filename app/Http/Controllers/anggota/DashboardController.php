@@ -15,7 +15,8 @@ class DashboardController extends Controller
             ->whereIn('status', [
                 Peminjaman::STATUS_MENUNGGU_PERSETUJUAN,
                 Peminjaman::STATUS_DIPINJAM,
-                Peminjaman::STATUS_MENUNGGU_PENGEMBALIAN,
+                Peminjaman::STATUS_MENUNGGU_ACC,
+                Peminjaman::STATUS_DISETUJUI,
             ])
             ->with('book')
             ->latest()
@@ -23,6 +24,8 @@ class DashboardController extends Controller
 
         $totalDenda = $user->peminjaman()
             ->whereIn('status', [
+                Peminjaman::STATUS_SELESAI,
+                // For backward compatibility with old data
                 Peminjaman::STATUS_MENUNGGU_PENGEMBALIAN,
                 Peminjaman::STATUS_DIKEMBALIKAN,
             ])
@@ -33,7 +36,7 @@ class DashboardController extends Controller
             'pinjamanAktif' => $pinjamanAktif,
             'totalDipinjam' => $pinjamanAktif->where('status', Peminjaman::STATUS_DIPINJAM)->count(),
             'totalMenunggu' => $pinjamanAktif->where('status', Peminjaman::STATUS_MENUNGGU_PERSETUJUAN)->count(),
-            'totalMenungguPengembalian' => $pinjamanAktif->where('status', Peminjaman::STATUS_MENUNGGU_PENGEMBALIAN)->count(),
+            'totalMenungguPengembalian' => $pinjamanAktif->whereIn('status', [Peminjaman::STATUS_MENUNGGU_ACC, Peminjaman::STATUS_DISETUJUI])->count(),
             'totalDenda' => $totalDenda,
         ]);
     }

@@ -29,6 +29,9 @@ class PeminjamanController extends Controller
             ->whereIn('status', [
                 Peminjaman::STATUS_MENUNGGU_PERSETUJUAN,
                 Peminjaman::STATUS_DIPINJAM,
+                Peminjaman::STATUS_MENUNGGU_ACC,
+                Peminjaman::STATUS_DISETUJUI,
+                // For backward compatibility
                 Peminjaman::STATUS_MENUNGGU_PENGEMBALIAN,
             ])
             ->exists();
@@ -41,6 +44,9 @@ class PeminjamanController extends Controller
             ->whereIn('status', [
                 Peminjaman::STATUS_MENUNGGU_PERSETUJUAN,
                 Peminjaman::STATUS_DIPINJAM,
+                Peminjaman::STATUS_MENUNGGU_ACC,
+                Peminjaman::STATUS_DISETUJUI,
+                // For backward compatibility
                 Peminjaman::STATUS_MENUNGGU_PENGEMBALIAN,
             ])
             ->count();

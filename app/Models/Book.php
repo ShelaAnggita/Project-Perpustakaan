@@ -40,6 +40,9 @@ class Book extends Model
         $dipakai = $this->peminjaman()
             ->whereIn('status', [
                 Peminjaman::STATUS_DIPINJAM,
+                Peminjaman::STATUS_MENUNGGU_ACC,
+                Peminjaman::STATUS_DISETUJUI,
+                // For backward compatibility
                 Peminjaman::STATUS_MENUNGGU_PENGEMBALIAN,
             ])
             ->count();

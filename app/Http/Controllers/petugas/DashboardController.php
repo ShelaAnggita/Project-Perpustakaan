@@ -15,7 +15,12 @@ class DashboardController extends Controller
         return view('petugas.dashboard', [
             'stats' => [
                 'pendingBorrow' => Peminjaman::where('status', Peminjaman::STATUS_MENUNGGU_PERSETUJUAN)->count(),
-                'pendingReturn' => Peminjaman::where('status', Peminjaman::STATUS_MENUNGGU_PENGEMBALIAN)->count(),
+                'pendingReturn' => Peminjaman::whereIn('status', [
+                    Peminjaman::STATUS_MENUNGGU_ACC,
+                    Peminjaman::STATUS_DISETUJUI,
+                    // For backward compatibility
+                    Peminjaman::STATUS_MENUNGGU_PENGEMBALIAN,
+                ])->count(),
                 'totalBooks' => Book::count(),
                 'totalMembers' => User::where('role', User::ROLE_ANGGOTA)->count(),
                 'totalCategories' => Category::count(),

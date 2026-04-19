@@ -33,6 +33,9 @@ class BukuController extends Controller
             ->whereIn('status', [
                 Peminjaman::STATUS_MENUNGGU_PERSETUJUAN,
                 Peminjaman::STATUS_DIPINJAM,
+                Peminjaman::STATUS_MENUNGGU_ACC,
+                Peminjaman::STATUS_DISETUJUI,
+                // For backward compatibility
                 Peminjaman::STATUS_MENUNGGU_PENGEMBALIAN,
             ])
             ->pluck('book_id')
@@ -46,6 +49,9 @@ class BukuController extends Controller
                 ->whereIn('status', [
                     Peminjaman::STATUS_MENUNGGU_PERSETUJUAN,
                     Peminjaman::STATUS_DIPINJAM,
+                    Peminjaman::STATUS_MENUNGGU_ACC,
+                    Peminjaman::STATUS_DISETUJUI,
+                    // For backward compatibility
                     Peminjaman::STATUS_MENUNGGU_PENGEMBALIAN,
                 ])
                 ->count() : 0,
@@ -61,6 +67,9 @@ class BukuController extends Controller
             ->whereIn('status', [
                 Peminjaman::STATUS_MENUNGGU_PERSETUJUAN,
                 Peminjaman::STATUS_DIPINJAM,
+                Peminjaman::STATUS_MENUNGGU_ACC,
+                Peminjaman::STATUS_DISETUJUI,
+                // For backward compatibility
                 Peminjaman::STATUS_MENUNGGU_PENGEMBALIAN,
             ])
             ->exists();
@@ -72,6 +81,9 @@ class BukuController extends Controller
                 ->whereIn('status', [
                     Peminjaman::STATUS_MENUNGGU_PERSETUJUAN,
                     Peminjaman::STATUS_DIPINJAM,
+                    Peminjaman::STATUS_MENUNGGU_ACC,
+                    Peminjaman::STATUS_DISETUJUI,
+                    // For backward compatibility
                     Peminjaman::STATUS_MENUNGGU_PENGEMBALIAN,
                 ])
                 ->count() >= 3,

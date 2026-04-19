@@ -16,8 +16,9 @@ class PengembalianController extends Controller
             ->with('book')
             ->whereIn('status', [
                 Peminjaman::STATUS_DIPINJAM,
-                Peminjaman::STATUS_MENUNGGU_PENGEMBALIAN,
-                Peminjaman::STATUS_DIKEMBALIKAN,
+                Peminjaman::STATUS_MENUNGGU_ACC,
+                Peminjaman::STATUS_DISETUJUI,
+                Peminjaman::STATUS_SELESAI,
             ])
             ->latest()
             ->get();
@@ -35,38 +36,21 @@ class PengembalianController extends Controller
 
         $request->validate([
             'tanggal_dikembalikan' => ['required', 'date'],
-            'kondisi' => ['required', 'in:baik,rusak,hilang'],
         ]);
 
         $tanggalDikembalikan = \Carbon\Carbon::createFromFormat('Y-m-d', $request->tanggal_dikembalikan)->startOfDay();
         $tanggalPinjam = $peminjaman->tanggal_pinjam?->copy()->startOfDay() ?? now()->startOfDay();
-        $batasKembali = $peminjaman->batas_kembali?->copy()->startOfDay();
 
         if ($tanggalDikembalikan->lt($tanggalPinjam)) {
             return back()->withErrors(['tanggal_dikembalikan' => 'Tanggal kembali tidak boleh sebelum tanggal pinjam.']);
         }
 
-        $kondisi = $request->kondisi;
-        $lateDays = 0;
-
-        if ($batasKembali && $tanggalDikembalikan->gt($batasKembali)) {
-            $lateDays = $batasKembali->diffInDays($tanggalDikembalikan);
-        }
-
-        $denda = match ($kondisi) {
-            'baik' => $lateDays * 2000,
-            'rusak' => 30000 + ($lateDays * 2000),
-            'hilang' => 100000 + ($lateDays * 2000),
-        };
-
         $peminjaman->update([
-            'status' => Peminjaman::STATUS_MENUNGGU_PENGEMBALIAN,
+            'status' => Peminjaman::STATUS_MENUNGGU_ACC,
             'tanggal_pengajuan_kembali' => now(),
             'tanggal_dikembalikan' => $tanggalDikembalikan,
-            'denda' => $denda,
-            'catatan' => 'Kondisi: '.ucfirst($kondisi).'.',
         ]);
 
-        return back()->with('success', 'Pengembalian diajukan. Tunggu konfirmasi petugas.');
+        return back()->with('success', 'Pengembalian diajukan. Tunggu ACC petugas.');
     }
 }

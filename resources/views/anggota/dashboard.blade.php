@@ -40,10 +40,22 @@
                 @forelse($pinjamanAktif as $item)
                     <tr>
                         <td>{{ $item->book->judul ?? $item->judul ?? '-' }}</td>
-                        <td><span class="badge {{ $item->status === 'dipinjam' ? 'success' : ($item->status === 'menunggu_pengembalian' ? 'warn' : 'info') }}">{{ ucwords(str_replace('_', ' ', $item->status)) }}</span></td>
+                        <td>
+                            @if($item->status === 'dipinjam')
+                                <span class="badge success">Sedang Dipinjam</span>
+                            @elseif($item->status === 'menunggu_persetujuan')
+                                <span class="badge info">Menunggu ACC</span>
+                            @elseif($item->status === 'menunggu_acc')
+                                <span class="badge warn">Pengembalian Ditunggu</span>
+                            @elseif($item->status === 'disetujui')
+                                <span class="badge info">Dalam Verifikasi</span>
+                            @else
+                                <span class="badge">{{ ucwords(str_replace('_', ' ', $item->status)) }}</span>
+                            @endif
+                        </td>
                         <td>{{ $item->batas_kembali?->format('d M Y H:i') ?? '-' }}</td>
                         <td>
-                            @if(in_array($item->status, [\App\Models\Peminjaman::STATUS_MENUNGGU_PENGEMBALIAN, \App\Models\Peminjaman::STATUS_DIKEMBALIKAN]))
+                            @if(in_array($item->status, [\App\Models\Peminjaman::STATUS_MENUNGGU_ACC, \App\Models\Peminjaman::STATUS_DISETUJUI, \App\Models\Peminjaman::STATUS_SELESAI, \App\Models\Peminjaman::STATUS_MENUNGGU_PENGEMBALIAN, \App\Models\Peminjaman::STATUS_DIKEMBALIKAN]))
                                 Rp {{ number_format($item->denda_terhitung, 0, ',', '.') }}
                             @else
                                 -

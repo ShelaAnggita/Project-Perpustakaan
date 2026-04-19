@@ -9,11 +9,15 @@
     <form method="GET" class="actions" style="flex: 1; display: flex; gap: 8px; flex-wrap: wrap; align-items: center;">
         <select name="status">
             <option value="">Semua status</option>
-            <option value="menunggu_persetujuan" @selected($statusAktif === 'menunggu_persetujuan')>Menunggu Persetujuan</option>
+            <option value="menunggu_persetujuan" @selected($statusAktif === 'menunggu_persetujuan')>Menunggu Persetujuan Peminjaman</option>
             <option value="dipinjam" @selected($statusAktif === 'dipinjam')>Dipinjam</option>
-            <option value="menunggu_pengembalian" @selected($statusAktif === 'menunggu_pengembalian')>Menunggu Pengembalian</option>
-            <option value="dikembalikan" @selected($statusAktif === 'dikembalikan')>Dikembalikan</option>
+            <option value="menunggu_acc" @selected($statusAktif === 'menunggu_acc')>Pengembalian Menunggu ACC</option>
+            <option value="disetujui" @selected($statusAktif === 'disetujui')>Pengembalian dalam Verifikasi</option>
+            <option value="selesai" @selected($statusAktif === 'selesai')>Pengembalian Selesai</option>
             <option value="ditolak" @selected($statusAktif === 'ditolak')>Ditolak</option>
+            <!-- Legacy statuses for backward compatibility -->
+            <option value="menunggu_pengembalian" @selected($statusAktif === 'menunggu_pengembalian')>Menunggu Pengembalian (Legacy)</option>
+            <option value="dikembalikan" @selected($statusAktif === 'dikembalikan')>Dikembalikan (Legacy)</option>
         </select>
         <button class="btn btn-primary" type="submit">Filter</button>
         <a class="btn btn-secondary" href="{{ route('kepala.reports.index') }}">Reset</a>

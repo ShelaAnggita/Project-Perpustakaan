@@ -10,6 +10,10 @@ class Peminjaman extends Model
 {
     public const STATUS_MENUNGGU_PERSETUJUAN = 'menunggu_persetujuan';
     public const STATUS_DIPINJAM = 'dipinjam';
+    public const STATUS_MENUNGGU_ACC = 'menunggu_acc';
+    public const STATUS_DISETUJUI = 'disetujui';
+    public const STATUS_SELESAI = 'selesai';
+    // Legacy statuses (for backward compatibility)
     public const STATUS_MENUNGGU_PENGEMBALIAN = 'menunggu_pengembalian';
     public const STATUS_DIKEMBALIKAN = 'dikembalikan';
     public const STATUS_DITOLAK = 'ditolak';
@@ -28,6 +32,7 @@ class Peminjaman extends Model
         'tanggal_dikembalikan',
         'denda',
         'catatan',
+        'kondisi',
     ];
 
     protected $casts = [
@@ -36,6 +41,7 @@ class Peminjaman extends Model
         'tanggal_pengajuan_kembali' => 'datetime',
         'tanggal_dikembalikan' => 'datetime',
         'denda' => 'integer',
+        'kondisi' => 'string',
     ];
 
     protected $appends = [
@@ -54,7 +60,7 @@ class Peminjaman extends Model
 
     public function getDendaTerhitungAttribute(): int
     {
-        if ($this->denda !== null && $this->status !== self::STATUS_DIPINJAM) {
+        if ($this->denda !== null && !in_array($this->status, [self::STATUS_DIPINJAM, self::STATUS_MENUNGGU_ACC])) {
             return $this->denda;
         }
 
@@ -66,11 +72,23 @@ class Peminjaman extends Model
         $patokan = Carbon::parse($this->tanggal_dikembalikan ?? now())->startOfDay();
 
         if ($patokan->lte($batasKembali)) {
-            return 0;
+            $lateDays = 0;
+        } else {
+            $lateDays = $batasKembali->diffInDays($patokan);
         }
 
-        $telatHari = $batasKembali->diffInDays($patokan);
+        // Calculate base fine based on late days
+        $fine = $lateDays * 2000;
 
-        return $telatHari * 2000;
+        // Add condition-based fine if kondisi is set
+        if ($this->kondisi) {
+            $fine += match ($this->kondisi) {
+                'rusak' => 30000,
+                'hilang' => 100000,
+                default => 0,
+            };
+        }
+
+        return $fine;
     }
 }
